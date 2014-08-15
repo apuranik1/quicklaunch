@@ -12,34 +12,71 @@ using std::string;
 using std::vector;
 using std::ifstream;
 
-using namespace quicklaunch;
-
-vector<App> scan_dir(const string& dirname)
+namespace quicklaunch
 {
-    vector<App> contents;
-    DIR* dir;
-    struct dirent* ent;
-    if ((dir = opendir(dirname.c_str())) != NULL)
+    int scan_dir(const string& dirname, vector<App>& app_list)
     {
-        while ((ent = readdir(dir)) != NULL)
+        static const string ENTRY_ENDING = ".desktop";
+        static const int ENDING_LEN = 8;
+        DIR* dir;
+        struct dirent* ent;
+        if ((dir = opendir(dirname.c_str())) != NULL)
         {
-            string name(ent->d_name);
-            if (ent->d_type != 'f')
-                continue;
-            if (name.length() >= 8 && name.substr(8) == ".desktop")
+            while ((ent = readdir(dir)) != NULL)
             {
-                ifstream in;
-                in.open(name);
-                const App& a = app_from_file(in);
-                in.close();
-                if (a.command.length() > 0)
-                    contents.push_back(a);
+                string name(ent->d_name);
+                //std::cout << name << '\n';
+                if (ent->d_type != DT_REG)
+                {
+                    //std::cout << "Not a file: " << name << '\n';
+                    continue;
+                }
+                const int len = name.length();
+                if (len >= ENDING_LEN && name.substr(len-ENDING_LEN) == ENTRY_ENDING)
+                {
+                    ifstream in(dirname + name);
+
+                    if (!in)
+                    {
+                        std::cerr << "Unable to read file " << dirname + name << '\n';
+                        continue;
+                    }
+
+                    const App& a = app_from_file(in);
+                    in.close();
+                    if (a.command.length() > 0)
+                        app_list.push_back(a);
+                    //else
+                    //    std::cerr << "Failed to generate app from " << dirname + name << '\n';
+                }
+                //else
+                //{
+                //    std::cout << "Not a desktop entry: " << name << '\n';
+                //}
             }
+            return 0;
         }
-        return contents;
+        else
+        {
+            return NO_SUCH_DIR;
+        }
     }
-    else
+
+    static const string APP_DIRS[] = 
     {
-        //throw std::
+        "/usr/share/applications/",
+        "/usr/local/share/applications/",
+        "~/.local/share/applications/"
+    };
+    static const int APP_DIR_COUNT = 3;
+
+    vector<App> get_all_apps()
+    {
+        vector<App> apps;
+
+        for (int i = 0; i < APP_DIR_COUNT; i++)
+            scan_dir(APP_DIRS[i], apps);
+
+        return apps;
     }
 }

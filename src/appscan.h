@@ -10,6 +10,7 @@
 
 namespace quicklaunch
 {
+    enum { NO_SUCH_DIR = 1 };
     std::vector<App> scan_dir(const std::string& dirname);
     std::vector<App> get_all_apps();
 }

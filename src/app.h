@@ -7,7 +7,7 @@
 namespace quicklaunch
 {
     struct App {
-        App(const std::string&, const std::string&, const std::string&, const std::string&);
+        App(const std::string& cmd, const std::string& name, const std::string& description, const std::string& icon);
         ~App();
         const std::string command;
         const std::string name;
