@@ -54,6 +54,8 @@ namespace quicklaunch
                 icon = line.substr(5, len);
             else if (len > 8 && line.substr(0,8) == "Comment=")
                 description = line.substr(8, len);
+            else if (line == "NoDisplay=true")
+                return App("","","","");
         }
         return App(cmd, name, description, icon);
     }

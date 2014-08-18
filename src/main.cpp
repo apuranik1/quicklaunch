@@ -1,9 +1,9 @@
-#include <gtkmm.h>
+//#include <gtkmm.h>
 #include <iostream>
-#include <fstream>
 
 #include "app.h"
 #include "appscan.h"
+#include "appfinder.h"
 
 using namespace quicklaunch;
 
@@ -28,4 +28,6 @@ int main(int argc, char *argv[])
     //    std::cout << test.description << std::endl;
     std::vector<App> apps = get_all_apps();
     std::cout << apps.size() << std::endl;
+    //std::cout << trim_by_query(apps, "FIREFOX").size() << std::endl;
+    std::cout << get_matching_apps(apps.cbegin(), apps.cend(), "text").size() << std::endl;
 }

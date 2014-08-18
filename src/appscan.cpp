@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <stdlib.h>
 #include <vector>
 #include <dirent.h>
 #include <cstring>
@@ -16,6 +17,7 @@ namespace quicklaunch
 {
     int scan_dir(const string& dirname, vector<App>& app_list)
     {
+        std::cout << dirname << '\n';
         static const string ENTRY_ENDING = ".desktop";
         static const int ENDING_LEN = 8;
         DIR* dir;
@@ -25,34 +27,39 @@ namespace quicklaunch
             while ((ent = readdir(dir)) != NULL)
             {
                 string name(ent->d_name);
-                //std::cout << name << '\n';
-                if (ent->d_type != DT_REG)
-                {
-                    //std::cout << "Not a file: " << name << '\n';
+
+                if (name == "." || name == "..")
                     continue;
-                }
-                const int len = name.length();
-                if (len >= ENDING_LEN && name.substr(len-ENDING_LEN) == ENTRY_ENDING)
+
+                if (ent->d_type == DT_DIR)
                 {
-                    ifstream in(dirname + name);
-
-                    if (!in)
-                    {
-                        std::cerr << "Unable to read file " << dirname + name << '\n';
-                        continue;
-                    }
-
-                    const App& a = app_from_file(in);
-                    in.close();
-                    if (a.command.length() > 0)
-                        app_list.push_back(a);
-                    //else
-                    //    std::cerr << "Failed to generate app from " << dirname + name << '\n';
+                    scan_dir(dirname + '/' +  name, app_list);
                 }
-                //else
-                //{
-                //    std::cout << "Not a desktop entry: " << name << '\n';
-                //}
+                else if (ent->d_type == DT_REG)
+                {
+                    const int len = name.length();
+                    if (len >= ENDING_LEN && name.substr(len-ENDING_LEN) == ENTRY_ENDING)
+                    {
+                        ifstream in(dirname + '/' + name);
+
+                        if (!in)
+                        {
+                            std::cerr << "Unable to read file " << dirname + name << '\n';
+                            continue;
+                        }
+
+                        const App& a = app_from_file(in);
+                        in.close();
+                        if (a.command.length() > 0)
+                            app_list.push_back(a);
+                        //else
+                        //    std::cerr << "Failed to generate app from " << dirname + name << '\n';
+                    }
+                    //else
+                    //{
+                    //    std::cout << "Not a desktop entry: " << name << '\n';
+                    //}
+                }
             }
             return 0;
         }
@@ -62,11 +69,13 @@ namespace quicklaunch
         }
     }
 
-    static const string APP_DIRS[] = 
+    const string HOME_DIR = getenv("HOME");
+
+    static const string APP_DIRS[] =
     {
-        "/usr/share/applications/",
-        "/usr/local/share/applications/",
-        "~/.local/share/applications/"
+        "/usr/share/applications",
+        "/usr/local/share/applications",
+        HOME_DIR + "/.local/share/applications"
     };
     static const int APP_DIR_COUNT = 3;
 
