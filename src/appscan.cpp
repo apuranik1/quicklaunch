@@ -40,7 +40,8 @@ namespace quicklaunch
                     const int len = name.length();
                     if (len >= ENDING_LEN && name.substr(len-ENDING_LEN) == ENTRY_ENDING)
                     {
-                        ifstream in(dirname + '/' + name);
+                        string path = dirname + '/' + name;
+                        ifstream in(path);
 
                         if (!in)
                         {
@@ -48,7 +49,7 @@ namespace quicklaunch
                             continue;
                         }
 
-                        const App& a = app_from_file(in);
+                        const App& a = app_from_file(in, path);
                         in.close();
                         if (a.command.length() > 0)
                             app_list.push_back(a);

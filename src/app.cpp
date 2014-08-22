@@ -13,7 +13,8 @@ using util::trim;
 namespace quicklaunch
 {
 
-    App::App(const string& cmd, const string& name, const string& description, const string& icon) :
+    App::App(const string& id, const string& cmd, const string& name, const string& description, const string& icon) :
+        id(id),
         command(cmd),
         name(name),
         description(description),
@@ -22,7 +23,7 @@ namespace quicklaunch
 
     App::~App() {}
 
-    App app_from_file(ifstream& file)
+    App app_from_file(ifstream& file, const string& app_id)
     {
         const string ENTRY_ID = "[Desktop Entry]";
         string line;
@@ -39,7 +40,7 @@ namespace quicklaunch
             break;
         }
         if (!is_desktop_entry)
-            return App("", "", "", "");
+            return App("", "", "", "", "");
         while (std::getline(file, line))
         {
             line = trim(line);
@@ -55,8 +56,8 @@ namespace quicklaunch
             else if (len > 8 && line.substr(0,8) == "Comment=")
                 description = line.substr(8, len);
             else if (line == "NoDisplay=true")
-                return App("","","","");
+                return App("","","","","");
         }
-        return App(cmd, name, description, icon);
+        return App(app_id, util::trim(cmd), util::trim(name), util::trim(description), util::trim(icon));
     }
 }
