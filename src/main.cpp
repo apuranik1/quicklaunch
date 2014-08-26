@@ -1,9 +1,9 @@
-//#include <gtkmm.h>
 #include <iostream>
 
 #include "app.h"
 #include "appscan.h"
 #include "appfinder.h"
+#include "history.h"
 
 using namespace quicklaunch;
 
@@ -28,6 +28,11 @@ int main(int argc, char *argv[])
     //    std::cout << test.description << std::endl;
     std::vector<App> apps = get_all_apps();
     std::cout << apps.size() << std::endl;
+    frequency_map hist;
+    read_history("/home/alok/test_history", hist);
     //std::cout << trim_by_query(apps, "FIREFOX").size() << std::endl;
     std::cout << get_matching_apps(apps.cbegin(), apps.cend(), "text").size() << std::endl;
+    sort_by_frequency(apps, hist);
+    std::cout << get_matching_apps(apps.cbegin(), apps.cend(), "text")[0].app_id() << '\n';
+    std::cout << quicklaunch::trim_history("/home/alok/test_history") << '\n';
 }

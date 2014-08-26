@@ -1,10 +1,13 @@
 #include "appscan.h"
 #include "app.h"
 
+#include "strutils.h"
+
+// rather extensive includes, but not much I can do about it...
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 #include <vector>
 #include <dirent.h>
 #include <cstring>
@@ -42,16 +45,15 @@ namespace quicklaunch
                     {
                         string path = dirname + '/' + name;
                         ifstream in(path);
-
                         if (!in)
                         {
                             std::cerr << "Unable to read file " << dirname + name << '\n';
                             continue;
                         }
 
-                        const App& a = app_from_file(in, path);
+                        const App a(in, path);
                         in.close();
-                        if (a.command.length() > 0)
+                        if (a.is_valid() > 0)
                             app_list.push_back(a);
                         //else
                         //    std::cerr << "Failed to generate app from " << dirname + name << '\n';
@@ -70,22 +72,26 @@ namespace quicklaunch
         }
     }
 
-    const string HOME_DIR = getenv("HOME");
+    const string LOCAL_DATA = strcat(getenv("HOME"), "/.local/share/");
+    const string DATA_DIRS = getenv("XDG_DATA_DIRS");
+    // full XDG compliance :)
+    const string SEARCH_DIRS = LOCAL_DATA + ":" + (DATA_DIRS.empty() ? "/usr/local/share/:/usr/share/" : DATA_DIRS);
 
-    static const string APP_DIRS[] =
+    /*static const string APP_DIRS[] =
     {
         "/usr/share/applications",
         "/usr/local/share/applications",
         HOME_DIR + "/.local/share/applications"
     };
-    static const int APP_DIR_COUNT = 3;
+    static const int APP_DIR_COUNT = 3;(*/
 
     vector<App> get_all_apps()
     {
         vector<App> apps;
 
-        for (int i = 0; i < APP_DIR_COUNT; i++)
-            scan_dir(APP_DIRS[i], apps);
+        vector<string> dirs = util::split(SEARCH_DIRS, ':');;
+        for (int i = 0; i < dirs.size(); ++i)
+            scan_dir(dirs[i] + "/applications", apps);
 
         return apps;
     }

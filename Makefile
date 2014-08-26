@@ -13,7 +13,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $@
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -g -c $< -o $@
 
 clean:
 	rm -f $(EXECUTABLE) $(OBJDIR)/*

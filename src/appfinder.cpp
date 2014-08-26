@@ -21,14 +21,18 @@ namespace quicklaunch
         string query;
         bool operator()(const App& app)
         {
-            return !matches(app, query);
+            return !app.matches(query);;
         }
     };
 
     vector<App> get_matching_apps(vector<App>::const_iterator start, vector<App>::const_iterator end, const string& query)
     {
         vector<App> output;
-        std::remove_copy_if(start, end, back_inserter(output), no_query_match(query));
+        std::remove_copy_if(start, end, back_inserter(output), 
+                [&query](const App& app)
+                {
+                    return !app.matches(query);
+                });
         return output;
     }
 
@@ -39,10 +43,4 @@ namespace quicklaunch
         return app_vec;
     }
 
-    bool matches(const App& app, const string& query)
-    {
-        return  (find_ignore_case(app.name, query) != string::npos
-                    || find_ignore_case(app.description, query) != string::npos
-                    || find_ignore_case(app.command, query) != string::npos);
-    }
 }

@@ -22,7 +22,7 @@ namespace quicklaunch
         if (!ofile)
             return FILE_OPEN_FAILURE;
 
-        ofile << app.id << std::endl;
+        ofile << app.app_id() << std::endl;
         ofile.close();
         return 0;
     }
@@ -45,13 +45,13 @@ namespace quicklaunch
 
     vector<App>& sort_by_frequency(vector<App>& app_list, const frequency_map& history)
     {
-        // what the hell did I do
+        // what the hell dapp_id I do
         std::sort(app_list.begin(), app_list.end(),
                 [&history](const App& a, const App& b)
                 {
-                    bool contains_a = history.count(a.id);
-                    if (history.count(b.id) && contains_a)
-                        return history.at(b.id) < history.at(a.id);
+                    bool contains_a = history.count(a.app_id());
+                    if (history.count(b.app_id()) && contains_a)
+                        return history.at(b.app_id()) < history.at(a.app_id());
                     return contains_a;
                 });
         return app_list;
@@ -81,7 +81,7 @@ namespace quicklaunch
         if (!ofile)
             return FILE_OPEN_FAILURE;
 
-        for (int i = 0; i < BUF_SIZE; i++)
+        for (int i = 0; i < BUF_SIZE; ++i)
             ofile << lines[(i + index) % BUF_SIZE] << '\n';
         ofile.close();
 
