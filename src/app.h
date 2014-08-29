@@ -17,6 +17,9 @@ namespace quicklaunch
         App(const std::string& app_id, const std::string& cmd, const std::string& name, const std::string& description, const std::string& icon);
         App(std::ifstream& file, const std::string& app_id);
         ~App();
+        bool operator== (const App& other) const {
+            return id == other.id;
+        }
         std::string& name() { // needs to be visible for lots of reasons
             return n;
         };

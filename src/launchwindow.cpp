@@ -2,6 +2,7 @@
 
 #include "app.h"
 #include "appscan.h"
+#include "history.h"
 
 #include <cstdlib>
 #include <gtkmm/box.h>
@@ -12,6 +13,7 @@ using Gtk::Box;
 using Gtk::Widget;
 using Gtk::Image;
 using Gtk::Label;
+using std::vector;
 
 namespace quicklaunch
 {
@@ -19,6 +21,17 @@ namespace quicklaunch
     Launcher::Launcher(const App& app) :
         app(app)
     {
+        box = new Box(Gtk::ORIENTATION_VERTICAL);
+        Gtk::Image* icon = Gtk::manage(new Image());
+        icon->set_from_icon_name(app.icon_name(), Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        Gtk::Label* name = Gtk::manage(new Label(app.name()));
+        box->pack_end(*icon);
+        box->pack_end(*name);
+    }
+
+    Launcher::~Launcher()
+    {
+        delete box;
     }
 
     void Launcher::launch()
@@ -26,24 +39,27 @@ namespace quicklaunch
         app.launch();
     }
 
-    Widget* Launcher::create_contents()
+    const Widget* Launcher::contents() const
     {
-        Box *box = new Box(Gtk::ORIENTATION_VERTICAL);
-        Image *img = Gtk::manage(new Image());
-        img->set_from_icon_name(app.icon_name(), Gtk::ICON_SIZE_LARGE_TOOLBAR);
-        Label *label = Gtk::manage(new Label(app.name()));
-        box->pack_end(*img);
-        box->pack_end(*label);
         return box;
     }
 
     Launch_window::Launch_window()
     {
+        frequency_map history;
+        read_history("/home/alok/test_history", history);
         apps = get_all_apps();
-        for (int i = 0; i < apps.size(); ++i)
+        sort_by_frequency(apps, history);
+        
+        for (vector<App>::size_type i = 0; i < apps.size(); ++i)
         {
-
         }
+    }
+
+    void Launch_window::execute_app()
+    {
+        int index = options.get_selected_row()->get_index();
+        
     }
     
 }

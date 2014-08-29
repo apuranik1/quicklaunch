@@ -13,28 +13,27 @@ namespace Gtk
 {
     class Widget;
     class Box;
-    class Image;
-    class Label;
 }
 
 namespace quicklaunch
 {
+    /* A class to wrap an App and provide a GUI */
     class Launcher
     {
-        // not copyable or assignable
-        Launcher(const Launcher& other);
-        Launcher& operator=(const Launcher& other);
+        //void initialize_widgets();
         App app;
         Gtk::Box* box;
-        Gtk::Image* icon;
-        Gtk::Label* name;
     public:
+        Launcher& operator= (const Launcher& rhs) = delete;
+        Launcher(const Launcher& other) = delete;
+
         Launcher(const App& app);
         ~Launcher();
         /* 
-         * Return a Widget representing the launcher. Memory is managed by the launcher.
+         * Return a Widget representing the launcher. The widget is destroyed
+         * when the launcher is.
          */
-        Gtk::Widget* create_contents();
+        const Gtk::Widget* contents() const;
         void launch();
     };
 
