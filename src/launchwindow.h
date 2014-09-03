@@ -6,43 +6,26 @@
 #include <gtkmm/window.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/listbox.h>
-#include <vector>
 
-// forward declarations for Launcher
-namespace Gtk
-{
-    class Widget;
-    class Box;
-}
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace quicklaunch
 {
-    /* A class to wrap an App and provide a GUI */
-    class Launcher
-    {
-        //void initialize_widgets();
-        App app;
-        Gtk::Box* box;
-    public:
-        Launcher& operator= (const Launcher& rhs) = delete;
-        Launcher(const Launcher& other) = delete;
 
-        Launcher(const App& app);
-        ~Launcher();
-        /* 
-         * Return a Widget representing the launcher. The widget is destroyed
-         * when the launcher is.
-         */
-        const Gtk::Widget* contents() const;
-        void launch();
-    };
+    class Launcher;
 
     class Launch_window : public Gtk::Window
     {
         Gtk::Entry query_entry;
         Gtk::ListBox options;
-        std::vector<App> apps;
+        // vector of owned Launchers
+        std::vector< std::unique_ptr<Launcher> > launchers;
+        // pointers to specific elements of previous vector
+        std::vector<Launcher*> displayed_launchers;
 
+        void regen_displayed(std::string query);
     public:
         Launch_window();
         ~Launch_window();
