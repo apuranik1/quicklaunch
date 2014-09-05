@@ -6,6 +6,7 @@
 #include <gtkmm/window.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/listbox.h>
+#include <gtkmm/box.h>
 
 #include <memory>
 #include <string>
@@ -18,6 +19,7 @@ namespace quicklaunch
 
     class Launch_window : public Gtk::Window
     {
+        Gtk::Box container;
         Gtk::Entry query_entry;
         Gtk::ListBox options;
         // vector of owned Launchers

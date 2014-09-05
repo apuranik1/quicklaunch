@@ -4,8 +4,8 @@
 #include "app.h"
 
 #include <algorithm>
+#include <memory>
 #include <string>
-#include <vector>
 
 
 // forward declarations for Launcher
@@ -22,21 +22,23 @@ namespace quicklaunch
     {
         //void initialize_widgets();
         App app;
-        Gtk::Box* box;
+        std::unique_ptr<Gtk::Box> box;
     public:
         Launcher& operator= (const Launcher& rhs) = delete;
 
         Launcher(const App& app);
         Launcher(const Launcher& other);
-        Launcher(Launcher&& other);
+        //Launcher(Launcher&& other);
         ~Launcher();
         /* 
          * Return a Widget representing the launcher. The widget is destroyed
          * when the launcher is.
          */
-        const Gtk::Widget* contents() const;
+        Gtk::Widget* contents();
         void launch() const;
-        bool matches(std::string query) const;
+        bool matches(const std::string& query) const {
+            return app.matches(query);
+        };
     };
 
 //    template<typename iter>

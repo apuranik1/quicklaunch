@@ -5,6 +5,9 @@
 #include <gtkmm/label.h>
 
 #include <algorithm>
+#include <memory>
+
+//#include <iostream>
 
 using Gtk::Box;
 using Gtk::Widget;
@@ -16,9 +19,9 @@ using std::vector;
 namespace quicklaunch
 {
     Launcher::Launcher(const App& app) :
-        app(app)
+        app(app),
+        box(new Box(Gtk::ORIENTATION_VERTICAL))
     {
-        box = new Box(Gtk::ORIENTATION_VERTICAL);
         Gtk::Image* icon = Gtk::manage(new Image());
         icon->set_from_icon_name(app.icon_name(), Gtk::ICON_SIZE_LARGE_TOOLBAR);
         Gtk::Label* name = Gtk::manage(new Label(app.name()));
@@ -30,16 +33,17 @@ namespace quicklaunch
         Launcher(other.app)
     {}
 
-    Launcher::Launcher(Launcher&& other) :
-        app(other.app)
-    {
-        box = other.box;
-        other.box = NULL;
-    }
+    //Launcher::Launcher(Launcher&& other) :
+    //    app(other.app)
+    //{
+    //    std::swap(box, other.box);;
+    //    other.box = NULL;
+    //}
 
     Launcher::~Launcher()
     {
-        delete box;
+        //std::cout << "Launcher destructing" << '\n';
+        //std::cout << "name is " << app.name() << '\n';
     }
 
     void Launcher::launch() const
@@ -47,9 +51,11 @@ namespace quicklaunch
         app.launch();
     }
 
-    const Widget* Launcher::contents() const
+    Widget* Launcher::contents()
     {
-        return box;
+        //std::cout << "Name: " << app.name() << '\n';
+        //std::cout << "Returning contents" << std::endl;
+        return box.get();
     }
 
 //    template<typename iter>
