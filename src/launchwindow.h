@@ -12,6 +12,11 @@
 #include <string>
 #include <vector>
 
+namespace Gtk
+{
+    class ListBoxRow;
+}
+
 namespace quicklaunch
 {
 
@@ -32,6 +37,7 @@ namespace quicklaunch
         Launch_window();
         ~Launch_window();
         void modified_query();
+        void row_activated(Gtk::ListBoxRow* row);
         void execute_app();
     };
 

@@ -55,6 +55,7 @@ namespace quicklaunch
     {
         //std::cout << "Name: " << app.name() << '\n';
         //std::cout << "Returning contents" << std::endl;
+        box->show_all_children();
         return box.get();
     }
 

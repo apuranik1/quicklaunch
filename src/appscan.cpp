@@ -72,10 +72,6 @@ namespace quicklaunch
         }
     }
 
-    const string LOCAL_DATA = strcat(getenv("HOME"), "/.local/share/");
-    const string DATA_DIRS = getenv("XDG_DATA_DIRS");
-    // full XDG compliance :)
-    const string SEARCH_DIRS = LOCAL_DATA + ":" + (DATA_DIRS.empty() ? "/usr/local/share/:/usr/share/" : DATA_DIRS);
 
     /*static const string APP_DIRS[] =
     {
@@ -83,14 +79,19 @@ namespace quicklaunch
         "/usr/local/share/applications",
         HOME_DIR + "/.local/share/applications"
     };
-    static const int APP_DIR_COUNT = 3;(*/
+    static const int APP_DIR_COUNT = 3;
+    */
 
     vector<App> get_all_apps()
     {
+        static const string LOCAL_DATA = string(getenv("HOME")) + "/.local/share/";
+        static const string DATA_DIRS = getenv("XDG_DATA_DIRS");
+        // full XDG compliance :)
+        static const string SEARCH_DIRS = LOCAL_DATA + ":" + (DATA_DIRS.empty() ? "/usr/local/share/:/usr/share/" : DATA_DIRS);
         vector<App> apps;
 
         vector<string> dirs = util::split(SEARCH_DIRS, ':');;
-        for (int i = 0; i < dirs.size(); ++i)
+        for (vector<string>::size_type i = 0; i < dirs.size(); ++i)
             scan_dir(dirs[i] + "/applications", apps);
 
         return apps;

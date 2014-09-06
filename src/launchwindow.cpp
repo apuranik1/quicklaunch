@@ -7,6 +7,7 @@
 #include "launcher.h"
 
 #include <gtkmm/box.h>
+#include <gtkmm/scrolledwindow.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -55,10 +56,14 @@ namespace quicklaunch
         add(container);
         container.add(query_entry);
         query_entry.set_text("abiword");
-        container.add(options);
+
+        Gtk::ScrolledWindow* scroll_pane = Gtk::manage(new Gtk::ScrolledWindow());
+        scroll_pane->add(options);
+        container.add(*scroll_pane);
 
 
         query_entry.signal_changed().connect(sigc::mem_fun(*this, &Launch_window::modified_query));
+        options.signal_row_activated().connect(sigc::mem_fun(*this, &Launch_window::row_activated));
         show_all_children();
     }
 
@@ -90,7 +95,7 @@ namespace quicklaunch
             Widget* widget = displayed_launchers[i]->contents();
             //Gtk::ListBoxRow* row = Gtk::manage(new Gtk::ListBoxRow());
             //row->add(*displayed_launchers[i]->contents());
-            widget->show_all();
+            //widget->show_all();
             options.add(*widget);
         }
 
@@ -102,6 +107,11 @@ namespace quicklaunch
         int index = options.get_selected_row()->get_index();
         displayed_launchers[index]->launch();
         close();
+    }
+
+    void Launch_window::row_activated(Gtk::ListBoxRow* row)
+    {
+        execute_app();
     }
     
 }

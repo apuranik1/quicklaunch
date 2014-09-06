@@ -5,8 +5,11 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <glibmm/spawn.h>
+#include <glibmm/miscutils.h>
 
 using std::string;
+using std::vector;
 using std::ifstream;
 using util::trim;
 
@@ -46,6 +49,10 @@ namespace quicklaunch
         {
             line = trim(line);
             string::size_type len = line.length();
+
+            // Different section embedded into desktop entry
+            if (len != 0 && line[0] == '[')
+                break;
             if (len < 5)
                 continue;
             if (line.substr(0, 5) == "Name=")
@@ -75,6 +82,18 @@ namespace quicklaunch
                     || util::find_ignore_case(descrip, query) != string::npos
                     || util::find_ignore_case(cmd, query) != string::npos);
     }
+
+    void App::launch() const
+    {
+        vector<string> env = Glib::listenv();
+        for (vector<string>::size_type i = 0; i < env.size(); ++i)
+        {
+            std::cout << env[i] << " : " << Glib::getenv(env[i]) << '\n';
+        }
+        vector<string> argv;// = util::split(cmd, ' ');
+        argv.push_back("abiword");
+        Glib::spawn_async("", argv, Glib::SPAWN_SEARCH_PATH);
+    };
 
     /*App app_from_file(ifstream& file, const string& id)
     {

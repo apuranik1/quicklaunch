@@ -42,10 +42,8 @@ namespace quicklaunch
         bool is_valid() const {
             return !cmd.empty();
         };
-        int launch() const {
-            return system(cmd.c_str());
-        };
         bool matches(const std::string& query) const;
+        void launch() const;
     };
 }
 
