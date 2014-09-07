@@ -17,6 +17,7 @@ namespace util
 
     std::string::size_type find_ignore_case(const std::string& str, const std::string& search, const std::locale& loc = std::locale());
 
+    std::string& replace_all(std::string& str, const std::string& to_replace, const std::string& replace_with);
 }
 
 #endif

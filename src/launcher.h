@@ -21,14 +21,14 @@ namespace quicklaunch
     class Launcher
     {
         //void initialize_widgets();
-        App app;
+        App a;
         std::unique_ptr<Gtk::Box> box;
     public:
         Launcher& operator= (const Launcher& rhs) = delete;
 
         Launcher(const App& app);
         Launcher(const Launcher& other);
-        //Launcher(Launcher&& other);
+        Launcher(Launcher&& other);
         ~Launcher();
         /* 
          * Return a Widget representing the launcher. The widget is destroyed
@@ -37,8 +37,11 @@ namespace quicklaunch
         Gtk::Widget* contents();
         void launch() const;
         bool matches(const std::string& query) const {
-            return app.matches(query);
+            return a.matches(query);
         };
+        App app() const {
+            return a;
+        }
     };
 
 //    template<typename iter>

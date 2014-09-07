@@ -51,8 +51,8 @@ namespace util
     // basically copied this from SO
 
     // functor for case-insensitive equality
-    struct my_equal {
-        my_equal( const std::locale& loc ) : loc_(loc) {}
+    struct case_ignore_equal {
+        case_ignore_equal( const std::locale& loc ) : loc_(loc) {}
         bool operator()(char ch1, char ch2) {
             return std::toupper(ch1, loc_) == std::toupper(ch2, loc_);
         }
@@ -63,10 +63,21 @@ namespace util
     string::size_type find_ignore_case(const string& str, const string& search, const locale& loc)
     {
         string::const_iterator it = std::search(str.begin(), str.end(), 
-                search.begin(), search.end(), my_equal(loc));
+                search.begin(), search.end(), case_ignore_equal(loc));
         if (it != str.end())
             return it - str.begin();
         else return string::npos; // not found
+    }
+
+    string& replace_all(string& str, const string& to_replace, const string& replace_with)
+    {
+        string::size_type pos = 0;
+        while ((pos = str.find(to_replace, pos)) != string::npos)
+        {
+            str.replace(pos, to_replace.length(), replace_with);
+            pos += replace_with.length();
+        }
+        return str;
     }
 
 }

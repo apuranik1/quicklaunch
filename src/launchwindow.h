@@ -27,12 +27,14 @@ namespace quicklaunch
         Gtk::Box container;
         Gtk::Entry query_entry;
         Gtk::ListBox options;
+        // more cpu usage, but hopefully lots less memory
+        std::vector<App> apps;
         // vector of owned Launchers
-        std::vector< std::unique_ptr<Launcher> > launchers;
-        // pointers to specific elements of previous vector
-        std::vector<Launcher*> displayed_launchers;
+//        std::vector< std::unique_ptr<Launcher> > launchers;
+        // displayed launchers
+        std::vector<Launcher> displayed_launchers;
 
-        void regen_displayed(std::string query);
+        void regen_displayed(const std::string& query);
     public:
         Launch_window();
         ~Launch_window();

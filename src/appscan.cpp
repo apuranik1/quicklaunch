@@ -1,5 +1,6 @@
 #include "appscan.h"
 #include "app.h"
+#include "xdgutils.h"
 
 #include "strutils.h"
 
@@ -7,10 +8,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <cstdlib>
 #include <vector>
 #include <dirent.h>
-#include <cstring>
+
+#include <glibmm/miscutils.h>
 
 using std::string;
 using std::vector;
@@ -64,6 +65,7 @@ namespace quicklaunch
                     //}
                 }
             }
+            closedir(dir);
             return 0;
         }
         else
@@ -84,13 +86,9 @@ namespace quicklaunch
 
     vector<App> get_all_apps()
     {
-        static const string LOCAL_DATA = string(getenv("HOME")) + "/.local/share/";
-        static const string DATA_DIRS = getenv("XDG_DATA_DIRS");
-        // full XDG compliance :)
-        static const string SEARCH_DIRS = LOCAL_DATA + ":" + (DATA_DIRS.empty() ? "/usr/local/share/:/usr/share/" : DATA_DIRS);
         vector<App> apps;
 
-        vector<string> dirs = util::split(SEARCH_DIRS, ':');;
+        vector<string> dirs = util::split(util::get_data_dirs() + ":" + util::get_data_home(), ':');;
         for (vector<string>::size_type i = 0; i < dirs.size(); ++i)
             scan_dir(dirs[i] + "/applications", apps);
 

@@ -5,12 +5,11 @@
 #include "appfinder.h"
 #include "history.h"
 #include "launchwindow.h"
+#include "strutils.h"
 
 #include <gtkmm.h>
 #include <gtkmm/application.h>
 #include <gtkmm/window.h>
-
-#include <glibmm/miscutils.h>
 
 using namespace quicklaunch;
 
@@ -43,14 +42,6 @@ int main(int argc, char *argv[])
     //sort_by_frequency(apps, hist);
     //std::cout << get_matching_apps(apps.cbegin(), apps.cend(), "text")[0].app_id() << '\n';
     //std::cout << quicklaunch::trim_history("/home/alok/test_history") << '\n';
-    std::vector<std::string> env = Glib::listenv();
-    for (std::vector<std::string>::size_type i = 0; i < env.size(); ++i)
-    {
-        std::cout << env[i] << " : " << Glib::getenv(env[i]) << '\n';
-    }
-    std::vector<std::string> args;
-    args.push_back("abiword");
-    Glib::spawn_async("", args, Glib::SPAWN_SEARCH_PATH);
     
     Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv);
 

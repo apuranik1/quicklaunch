@@ -5,6 +5,7 @@
 #include "appscan.h"
 #include "history.h"
 #include "launcher.h"
+#include "xdgutils.h"
 
 #include <gtkmm/box.h>
 #include <gtkmm/scrolledwindow.h>
@@ -12,7 +13,7 @@
 #include <string>
 #include <vector>
 
-//#include <iostream>
+#include <iostream>
 
 using Gtk::Box;
 using Gtk::Widget;
@@ -44,18 +45,17 @@ namespace quicklaunch
         frequency_map history;
         // this will be factored out to some other method eventually
         // if this fails...do nothing, actually
-        read_history("/home/alok/test_history", history);
-        vector<App> apps = get_all_apps();
+        read_history(util::get_history_file(), history);
+        apps = get_all_apps();
         sort_by_frequency(apps, history);
 
-        // create vector of launchers
-        launchers.reserve(apps.size());
-        for (vector<Launcher*>::size_type i = 0; i < apps.size(); ++i)
-            launchers.push_back( unique_ptr<Launcher>(new Launcher(apps[i])) );
+//        // create vector of launchers
+//        launchers.reserve(apps.size());
+//        for (vector<Launcher*>::size_type i = 0; i < apps.size(); ++i)
+//            launchers.push_back( unique_ptr<Launcher>(new Launcher(apps[i])) );
 
         add(container);
         container.add(query_entry);
-        query_entry.set_text("abiword");
 
         Gtk::ScrolledWindow* scroll_pane = Gtk::manage(new Gtk::ScrolledWindow());
         scroll_pane->add(options);
@@ -74,38 +74,46 @@ namespace quicklaunch
 
     void Launch_window::modified_query()
     {
-        //std::cout << "modified" << std::endl;
-        string query = query_entry.get_text();
-        displayed_launchers = get_matching_launchers(launchers.cbegin(), launchers.cend(), query);
-
         // clear list of apps
         vector<Widget*> children = options.get_children();
         for (vector<Widget*>::size_type i = 0; i < children.size(); ++i)
         {
             Gtk::Bin* row = static_cast<Gtk::Bin*>(children[i]);
-            row->remove();
+            //row->remove();
             options.remove(*row);
-            // apparently this works?
-            //delete children[i]; // extreme measures
+            //delete row;
         }
+        std::cout << options.get_children().size() << std::endl;
 
+        typedef vector<App>::size_type vec_sz;
+
+        string query = query_entry.get_text();
+//        displayed_launchers = get_matching_launchers(launchers.cbegin(), launchers.cend(), query);
+        displayed_launchers.clear();
+        vector<App> matching_apps = get_matching_apps(apps.cbegin(), apps.cend(), query);
+        vec_sz size = matching_apps.size() > 5 ? 5 : matching_apps.size();
         // rebuild based on new query
-        for (vector<Launcher*>::size_type i = 0; i < displayed_launchers.size(); ++i)
+        for (vec_sz i = 0; i < size; ++i)
         {
-            Widget* widget = displayed_launchers[i]->contents();
+            displayed_launchers.push_back(Launcher(matching_apps[i]));
             //Gtk::ListBoxRow* row = Gtk::manage(new Gtk::ListBoxRow());
             //row->add(*displayed_launchers[i]->contents());
             //widget->show_all();
-            options.add(*widget);
+            options.add(*displayed_launchers[i].contents());
         }
 
         show_all_children();
     }
 
+    void Launch_window::regen_displayed(const string& query)
+    {
+    }
+
     void Launch_window::execute_app()
     {
         int index = options.get_selected_row()->get_index();
-        displayed_launchers[index]->launch();
+        record_selection(displayed_launchers[index].app(), util::get_history_file());
+        displayed_launchers[index].launch();
         close();
     }
 
