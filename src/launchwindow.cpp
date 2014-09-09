@@ -20,7 +20,6 @@ using std::vector;
 
 namespace quicklaunch
 {
-
     // go through range defined by begin and end and look for matches to query
     // just works on iterators returning smart pointers, but wtf, I wanted to try templates
     template<typename iter>
@@ -40,7 +39,6 @@ namespace quicklaunch
         container(Gtk::ORIENTATION_VERTICAL)
     {
         frequency_map history;
-        // this will be factored out to some other method eventually
         // if this fails...do nothing, actually
         read_history(util::get_history_file(), history);
         apps = get_all_apps();
@@ -61,6 +59,7 @@ namespace quicklaunch
         container.add(options);
 
 
+        signal_key_press_event().connect(sigc::mem_fun(*this, &Launch_window::key_press));
         query_entry.signal_changed().connect(sigc::mem_fun(*this, &Launch_window::modified_query));
 
         query_entry.signal_activate().connect(sigc::mem_fun(*this, &Launch_window::execute_app));
@@ -113,6 +112,12 @@ namespace quicklaunch
 
     void Launch_window::execute_app()
     {
+        const string& text = query_entry.get_text();
+        if (text.length() > 1 && text[0] == '!')
+        {
+            App("", text.substr(1), "", "", "").launch();
+            close();
+        }
         if (options.get_children().empty())
             return;
         Gtk::ListBoxRow* row = options.get_selected_row();
@@ -120,6 +125,11 @@ namespace quicklaunch
         record_selection(displayed_launchers[index].app(), util::get_history_file());
         displayed_launchers[index].launch();
         close();
+    }
+
+    bool Launch_window::key_press(GdkEventKey* event)
+    {
+        return false;
     }
 
     void Launch_window::row_activated(Gtk::ListBoxRow* row)
