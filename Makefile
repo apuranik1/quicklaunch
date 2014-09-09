@@ -10,6 +10,10 @@ EXECUTABLE = quicklaunch
 
 all: $(SOURCES) $(EXECUTABLE)
 
+install: all
+	cp $(EXECUTABLE) /usr/bin/
+	chmod a+x /usr/bin/$(EXECUTABLE)
+
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDLIBS) $(OBJECTS) -o $@
 
