@@ -45,7 +45,7 @@ namespace quicklaunch
 
     vector<App>& sort_by_frequency(vector<App>& app_list, const frequency_map& history)
     {
-        // what the hell dapp_id I do
+        // what the hell did I do
         std::sort(app_list.begin(), app_list.end(),
                 [&history](const App& a, const App& b)
                 {
@@ -64,7 +64,7 @@ namespace quicklaunch
             return FILE_OPEN_FAILURE;
 
         // read into a circular buffer
-        const int BUF_SIZE = 50;
+        const int BUF_SIZE = 100;
         string lines[BUF_SIZE];
         int index = 0;
 

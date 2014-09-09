@@ -28,7 +28,7 @@ namespace quicklaunch
 
         Launcher(const App& app);
         Launcher(const Launcher& other);
-        Launcher(Launcher&& other);
+        Launcher(Launcher&& other) noexcept;
         ~Launcher();
         /* 
          * Return a Widget representing the launcher. The widget is destroyed
