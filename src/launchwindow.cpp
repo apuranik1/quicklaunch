@@ -8,14 +8,9 @@
 #include "xdgutils.h"
 
 #include <gtkmm/box.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/enums.h>
 #include <gdkmm/rgba.h>
-#include <memory>
 #include <string>
 #include <vector>
-
-#include <iostream>
 
 using Gtk::Box;
 using Gtk::Widget;
@@ -72,21 +67,10 @@ namespace quicklaunch
         options.signal_row_activated().connect(sigc::mem_fun(*this, &Launch_window::row_activated));
         
         show_all_children();
-        // what the hell why do i need to do this something is screwed up
-        //modified_query();
-        //modified_query();
-
-        //displayed_launchers.reserve(16);
     }
 
     Launch_window::~Launch_window()
-    {
-        //std::cout << "Launch_window destructing" << '\n';
-    }
-    void state_changed(Gtk::StateType new_state)
-    {
-        std::cout << new_state << std::endl;
-    }
+    {}
 
     void Launch_window::modified_query()
     {
@@ -106,13 +90,11 @@ namespace quicklaunch
         string query = query_entry.get_text();
 //        displayed_launchers = get_matching_launchers(launchers.cbegin(), launchers.cend(), query);
         vector<App> matching_apps = get_matching_apps(apps.cbegin(), apps.cend(), query);
-        vec_sz size = matching_apps.size() > 10 ? 10 : matching_apps.size();
+        vec_sz size = matching_apps.size() > 6 ? 6 : matching_apps.size();
         // rebuild based on new query
-        //displayed_launchers.reserve(16);
         for (vec_sz i = 0; i < size; ++i)
         {
             displayed_launchers.push_back(matching_apps[i]);
-            std::cout << displayed_launchers.size() << std::endl;
             Widget* widget = displayed_launchers[i].contents();
             Gtk::ListBoxRow* row = Gtk::manage(new Gtk::ListBoxRow());
             row->add(*widget);

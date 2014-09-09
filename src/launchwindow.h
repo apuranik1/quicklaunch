@@ -40,6 +40,7 @@ namespace quicklaunch
         ~Launch_window();
         void modified_query();
         void row_activated(Gtk::ListBoxRow* row);
+        void key_press(GdkEventKey* event);
         void execute_app();
     };
 
