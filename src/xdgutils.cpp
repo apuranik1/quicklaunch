@@ -3,6 +3,9 @@
 #include <string>
 #include <glibmm/miscutils.h>
 
+#include <sys/stat.h>
+#include <errno.h>
+
 using std::string;
 
 namespace util
@@ -25,6 +28,14 @@ namespace util
 
     string get_history_file()
     {
-        return get_data_home() + "quicklaunch_history";
+        const string quicklaunch_home = get_data_home() + "quicklaunch/";
+        if (mkdir(quicklaunch_home.c_str(), 755))
+        {
+            // handle screwups
+            if (errno != EEXIST)
+                // always safe
+                return "/dev/null";
+        }
+        return quicklaunch_home + "history";
     }
 }
