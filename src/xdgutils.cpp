@@ -1,41 +1,34 @@
 #include "xdgutils.h"
 
 #include <string>
+#include <vector>
 #include <glibmm/miscutils.h>
+// awkward mix of glibmm and glib, but what can you do
+#include <glib/gfileutils.h>
 
-#include <sys/stat.h>
-#include <errno.h>
+#include <stdexcept>
+#include <iostream>
 
 using std::string;
+using std::vector;
 
 namespace util
 {
 
-    string get_data_dirs()
+    vector<string> get_data_dirs()
     {
-        bool found;
-        static const string XDG_DATA_DIRS = Glib::getenv("XDG_DATA_DIRS", found);
-        return found ? XDG_DATA_DIRS : "/usr/local/share/:/usr/share/";
-    }
-
-    string get_data_home()
-    {
-        bool found = false;
-        static const string XDG_DATA_HOME = Glib::getenv("XDG_DATA_HOME", found);
-        return found ? XDG_DATA_HOME : Glib::getenv("HOME") + "/.local/share/";
-        // if HOME is not set, we're gonna have a problem
+        return Glib::get_system_data_dirs();
     }
 
     string get_history_file()
     {
-        const string quicklaunch_home = get_data_home() + "quicklaunch/";
-        if (mkdir(quicklaunch_home.c_str(), 755))
+        const string quicklaunch_home = Glib::get_user_data_dir() + "/quicklaunch";
+        
+        if (g_mkdir_with_parents(quicklaunch_home.c_str(), 0700))
         {
-            // handle screwups
-            if (errno != EEXIST)
-                // always safe
-                return "/dev/null";
+            // something screwed up
+            throw std::runtime_error("Failed to create directory " + quicklaunch_home);
         }
-        return quicklaunch_home + "history";
+        return quicklaunch_home + "/history";
     }
 }

@@ -88,7 +88,8 @@ namespace quicklaunch
     {
         vector<App> apps;
 
-        vector<string> dirs = util::split(util::get_data_dirs() + ":" + util::get_data_home(), ':');;
+        vector<string> dirs = util::get_data_dirs();
+        dirs.push_back(Glib::get_user_data_dir());
         for (vector<string>::size_type i = 0; i < dirs.size(); ++i)
             scan_dir(dirs[i] + "/applications", apps);
 

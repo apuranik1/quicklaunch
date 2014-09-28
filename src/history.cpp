@@ -24,6 +24,7 @@ namespace quicklaunch
 
         ofile << app.app_id() << std::endl;
         ofile.close();
+        trim_history(history_file);
         return 0;
     }
 
