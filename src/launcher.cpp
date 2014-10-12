@@ -56,6 +56,7 @@ namespace quicklaunch
         box->pack_start(*icon, false, false);
         box->pack_start(*name, false, false);
         box->show_all();
+        box->set_tooltip_text(app.comment());
     }
 
     Launcher::Launcher(const Launcher& other) :

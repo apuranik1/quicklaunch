@@ -17,11 +17,11 @@ using util::trim;
 namespace quicklaunch
 {
 
-    App::App(const string& app_id, const string& cmd, const string& name, const string& description, const string& icon, const string& working_dir) :
+    App::App(const string& app_id, const string& cmd, const string& name, const string& comment, const string& icon, const string& working_dir) :
         path(app_id),
         cmd(cmd),
         n(name),
-        descrip(description),
+        descrip(comment),
         icon(icon),
         cwd(working_dir)
     {}
@@ -92,6 +92,11 @@ namespace quicklaunch
         std::cout << cwd << std::endl;
         Glib::spawn_async(cwd, prep(), Glib::SPAWN_SEARCH_PATH);
     };
+
+    string App::comment() const
+    {
+        return descrip + '\n' + "Command: " + cmd;
+    }
 
     string& unescape(string& str)
     {

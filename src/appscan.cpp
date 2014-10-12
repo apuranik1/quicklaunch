@@ -21,7 +21,6 @@ namespace quicklaunch
 {
     int scan_dir(const string& dirname, vector<App>& app_list)
     {
-        std::cout << dirname << '\n';
         static const string ENTRY_ENDING = ".desktop";
         static const int ENDING_LEN = 8;
         DIR* dir;

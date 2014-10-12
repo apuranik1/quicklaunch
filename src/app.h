@@ -19,7 +19,7 @@ namespace quicklaunch
         std::list<std::string> prep() const;
 
     public:
-        App(const std::string& app_id, const std::string& cmd, const std::string& name, const std::string& description, const std::string& icon, const std::string& working_dir = "");
+        App(const std::string& app_id, const std::string& cmd, const std::string& name, const std::string& comment, const std::string& icon, const std::string& working_dir = "");
         App(std::ifstream& file, const std::string& app_id);
         ~App();
         bool operator== (const App& other) const {
@@ -49,6 +49,7 @@ namespace quicklaunch
         };
         bool matches(const std::string& query) const;
         void launch() const;
+        std::string comment() const;
     };
 }
 
