@@ -49,7 +49,6 @@ namespace quicklaunch
 //        for (vector<Launcher*>::size_type i = 0; i < apps.size(); ++i)
 //            launchers.push_back( unique_ptr<Launcher>(new Launcher(apps[i])) );
 
-        set_default_size(200, 200);
         add(container);
         container.add(query_entry);
 

@@ -1,20 +1,44 @@
 #include "launcher.h"
 
+#include <glibmm/refptr.h>
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
+#include <gdkmm/pixbuf.h>
 
 #include <memory>
+
 
 using Gtk::Box;
 using Gtk::Widget;
 using Gtk::Image;
 using Gtk::Label;
+using Glib::RefPtr;
+using Gdk::Pixbuf;
 using std::string;
 using std::vector;
 
 namespace quicklaunch
 {
+    Image* icon_from_name(const string& icon_name, const Gtk::IconSize& size)
+    {
+        Image* icon = new Image();
+        int width, height;
+        Gtk::IconSize::lookup(size, width, height);
+        if (icon_name.length() > 0 && icon_name[0] == '/')
+        {
+            // use absolute path: some image manipulations required
+            RefPtr<Pixbuf> buf = Pixbuf::create_from_file(icon_name);
+            buf = buf->scale_simple(width, height, Gdk::INTERP_BILINEAR);
+            icon->set(buf);
+        }
+        else
+        {
+            icon->set_from_icon_name(icon_name, size);
+        }
+        return icon;
+    }
+
     Launcher::Launcher(const App& app) :
         a(app),
         box(new Box(Gtk::ORIENTATION_HORIZONTAL))
@@ -22,8 +46,9 @@ namespace quicklaunch
         Gdk::RGBA awkward_grey;
         awkward_grey.set_grey(0.5, 0.1);
         box->override_background_color(awkward_grey, Gtk::STATE_FLAG_NORMAL);
-        Gtk::Image* icon = Gtk::manage(new Image());
-        icon->set_from_icon_name(app.icon_name(), Gtk::ICON_SIZE_LARGE_TOOLBAR);
+
+        Image* icon = Gtk::manage(icon_from_name(app.icon_name(), Gtk::ICON_SIZE_LARGE_TOOLBAR));
+
         icon->set_margin_end(20);
         Gtk::Label* name = Gtk::manage(new Label(app.name()));
 

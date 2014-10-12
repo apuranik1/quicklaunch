@@ -7,7 +7,7 @@ The goal of this project is to create a convenient app-launcher for my Openbox s
 
 Features
 --------
-+ App suggestions that are continuously refined as you tyep
++ App suggestions that are continuously refined as you type
 + Fully keyboard-oriented UI
 + Extremely minimal interface - exactly zero (0) buttons, very little eye-candy
 + Ability to execute any command by prefixing it with "!"
