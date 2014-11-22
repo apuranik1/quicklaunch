@@ -4,10 +4,12 @@
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
+#include <gtkmm/icontheme.h>
 #include <gdkmm/pixbuf.h>
 
 #include <memory>
 
+#include <iostream>
 
 using Gtk::Box;
 using Gtk::Widget;
@@ -25,6 +27,7 @@ namespace quicklaunch
         Image* icon = new Image();
         int width, height;
         Gtk::IconSize::lookup(size, width, height);
+        //std::cout << width << std::endl << height << std::endl;
         if (icon_name.length() > 0 && icon_name[0] == '/')
         {
             // use absolute path: some image manipulations required
@@ -34,7 +37,12 @@ namespace quicklaunch
         }
         else
         {
+            // this was freaking painful
             icon->set_from_icon_name(icon_name, size);
+            Glib::RefPtr<Gtk::IconTheme> theme(Gtk::IconTheme::get_default());
+            RefPtr<Pixbuf> buf = theme->load_icon(icon_name, width);
+            buf = buf->scale_simple(width, height, Gdk::INTERP_BILINEAR);
+            icon->set(buf);
         }
         return icon;
     }
@@ -47,7 +55,7 @@ namespace quicklaunch
         awkward_grey.set_grey(0.5, 0.1);
         box->override_background_color(awkward_grey, Gtk::STATE_FLAG_NORMAL);
 
-        Image* icon = Gtk::manage(icon_from_name(app.icon_name(), Gtk::ICON_SIZE_LARGE_TOOLBAR));
+        Image* icon = Gtk::manage(icon_from_name(app.icon_name(), Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
         icon->set_margin_end(20);
         Gtk::Label* name = Gtk::manage(new Label(app.name()));

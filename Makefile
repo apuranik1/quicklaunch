@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 SRCDIR = src
 OBJDIR = obj
-CC = g++
+# CC = g++
 CFLAGS = -std=c++11 -Wall -O2 -I. `pkg-config --cflags gtkmm-3.0`
 LDLIBS = -lpthread `pkg-config --libs gtkmm-3.0`
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)
@@ -15,10 +15,10 @@ install: all
 	chmod a+x /usr/bin/$(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDLIBS) $(OBJECTS) -o $@
+	$(CXX) $(LDLIBS) $(OBJECTS) -o $@
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
-	$(CC) $(CFLAGS) -g -c $< -o $@
+	$(CXX) $(CFLAGS) -g -c $< -o $@
 
 clean:
 	rm -f $(EXECUTABLE) $(OBJDIR)/*
