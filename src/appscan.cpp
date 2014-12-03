@@ -38,7 +38,7 @@ namespace quicklaunch
                 {
                     scan_dir(dirname + '/' +  name, app_list);
                 }
-                else if (ent->d_type == DT_REG)
+                else if (ent->d_type == DT_REG || ent->d_type == DT_LNK)
                 {
                     const int len = name.length();
                     if (len >= ENDING_LEN && name.substr(len-ENDING_LEN) == ENTRY_ENDING)
