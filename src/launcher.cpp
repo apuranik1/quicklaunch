@@ -36,10 +36,18 @@ namespace quicklaunch
         else
         {
             // this was freaking painful
-            Glib::RefPtr<Gtk::IconTheme> theme(Gtk::IconTheme::get_default());
-            RefPtr<Pixbuf> buf = theme->load_icon(icon_name, width);
-            buf = buf->scale_simple(width, height, Gdk::INTERP_BILINEAR);
-            icon->set(buf);
+            try
+            {
+                Glib::RefPtr<Gtk::IconTheme> theme(Gtk::IconTheme::get_default());
+                RefPtr<Pixbuf> buf = theme->load_icon(icon_name, width);
+                buf = buf->scale_simple(width, height, Gdk::INTERP_BILINEAR);
+                icon->set(buf);
+            }
+            catch (Glib::Error err)
+            {
+                // worst case, it just displays a broken image
+                icon->set_from_icon_name(icon_name, size);
+            }
         }
         return icon;
     }
