@@ -18,7 +18,8 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(LDLIBS) $(OBJECTS) -o $@
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
-	$(CXX) $(CFLAGS) -g -c $< -o $@
+	mkdir -p $(OBJDIR)
+	$(CXX) $(CFLAGS)  -g -c $< -o $@
 
 clean:
 	rm -f $(EXECUTABLE) $(OBJDIR)/*
