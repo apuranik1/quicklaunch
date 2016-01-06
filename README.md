@@ -1,9 +1,9 @@
 quicklaunch
 ===========
 
-A minimal desktop-independent gtkmm-based application launcher
+A minimal lightweight application launcher for Linux
 
-The goal of this project is to create a convenient app-launcher for my Openbox system while also teaching myself C++. This launcher is compatible with Freedesktop-compliant operating systems.
+The goal of this project is to create a convenient and desktop-independent app-launcher for my Arch Linux system (with Openbox) while also teaching myself C++. This launcher should be compatible with Freedesktop-compliant operating systems, but it only gets tested on Arch Linux.
 
 Features
 --------
@@ -11,6 +11,7 @@ Features
 + Fully keyboard-oriented UI
 + Extremely minimal interface - exactly zero (0) buttons, very little eye-candy
 + Ability to execute any command by prefixing it with "!"
++ Memory of most commonly used applications to provide better suggestions
 
 Future Features
 ---------------
