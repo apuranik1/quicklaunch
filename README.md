@@ -1,4 +1,4 @@
-quicklaunch
+Liftoff
 ===========
 
 A minimal lightweight application launcher for Linux
