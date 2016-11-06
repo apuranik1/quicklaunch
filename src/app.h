@@ -6,7 +6,7 @@
 #include <vector>
 
 // TODO: upgrade App to full class
-namespace quicklaunch
+namespace liftoff
 {
     class App {
         std::string path;

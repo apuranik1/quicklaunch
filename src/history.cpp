@@ -14,7 +14,7 @@ using std::ofstream;
 using std::string;
 using std::vector;
 
-namespace quicklaunch
+namespace liftoff
 {
     int record_selection(const App& app, const string& history_file)
     {

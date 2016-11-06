@@ -17,7 +17,7 @@ using std::string;
 using std::vector;
 using std::ifstream;
 
-namespace quicklaunch
+namespace liftoff
 {
     int scan_dir(const string& dirname, vector<App>& app_list)
     {

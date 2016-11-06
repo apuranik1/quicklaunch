@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace quicklaunch
+namespace liftoff
 {
     enum { NO_SUCH_DIR = 1 };
     std::vector<App> scan_dir(const std::string& dirname);

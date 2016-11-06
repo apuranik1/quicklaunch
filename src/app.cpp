@@ -14,7 +14,7 @@ using std::vector;
 using std::ifstream;
 using util::trim;
 
-namespace quicklaunch
+namespace liftoff
 {
 
     App::App(const string& app_id, const string& cmd, const string& name, const string& comment, const string& icon, const string& working_dir) :

@@ -19,7 +19,7 @@ using Gdk::Pixbuf;
 using std::string;
 using std::vector;
 
-namespace quicklaunch
+namespace liftoff
 {
     Image* icon_from_name(const string& icon_name, const Gtk::IconSize& size)
     {

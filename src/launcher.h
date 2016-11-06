@@ -15,7 +15,7 @@ namespace Gtk
     class Box;
 }
 
-namespace quicklaunch
+namespace liftoff
 {
     /* A class to wrap an App and provide a GUI */
     class Launcher

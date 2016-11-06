@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 
-namespace quicklaunch
+namespace liftoff
 {
     struct App;
     

@@ -17,7 +17,7 @@ namespace Gtk
     class ListBoxRow;
 }
 
-namespace quicklaunch
+namespace liftoff
 {
 
     class Launcher;

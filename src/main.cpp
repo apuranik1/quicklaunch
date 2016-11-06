@@ -11,7 +11,7 @@
 #include <gtkmm/application.h>
 #include <gtkmm/window.h>
 
-using namespace quicklaunch;
+using namespace liftoff;
 
 int main(int argc, char *argv[])
 {
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     
     Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv);
 
-    quicklaunch::Launch_window window;
+    liftoff::Launch_window window;
 //    Gtk::Window window;
     //window.set_default_size(200, 300);
     return app->run(window);

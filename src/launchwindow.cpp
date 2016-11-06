@@ -18,7 +18,7 @@ using std::string;
 using std::unique_ptr;
 using std::vector;
 
-namespace quicklaunch
+namespace liftoff
 {
     // go through range defined by begin and end and look for matches to query
     // just works on iterators returning smart pointers, but wtf, I wanted to try templates

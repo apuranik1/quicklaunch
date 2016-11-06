@@ -12,7 +12,7 @@ using std::string;
 
 using util::find_ignore_case;
 
-namespace quicklaunch
+namespace liftoff
 {
     /* Functor to check whether an app fails to match a query */
     struct no_query_match

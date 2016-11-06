@@ -16,3 +16,9 @@ Features
 Future Features
 ---------------
 + Tab completion for arbitrary commands
+
+Note to anyone who used this while it was named quicklaunch
+-----------------------------------------------------------
+
+Move the directory .local/share/quicklaunch to .local/share/liftoff to avoid
+losing history. Also delete the old executable.

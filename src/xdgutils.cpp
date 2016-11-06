@@ -22,13 +22,13 @@ namespace util
 
     string get_history_file()
     {
-        const string quicklaunch_home = Glib::get_user_data_dir() + "/quicklaunch";
+        const string liftoff_home = Glib::get_user_data_dir() + "/liftoff";
         
-        if (g_mkdir_with_parents(quicklaunch_home.c_str(), 0700))
+        if (g_mkdir_with_parents(liftoff_home.c_str(), 0700))
         {
             // something screwed up
-            throw std::runtime_error("Failed to create directory " + quicklaunch_home);
+            throw std::runtime_error("Failed to create directory " + liftoff_home);
         }
-        return quicklaunch_home + "/history";
+        return liftoff_home + "/history";
     }
 }
